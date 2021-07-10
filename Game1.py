@@ -9,7 +9,7 @@ intro = True
   
 WIDTH = 800
 HEIGHT = 600
-   
+
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 RED_B = (255,0,0)
@@ -19,8 +19,9 @@ BLUE_B = (0,0,255)
 RED = (200,0,0)
 BLUE = (0,0,200)
 GREEN = (0,200,0)
-  
-  
+colors = [(132, 255, 33), (237, 255, 33), (255, 190, 33), (255, 137, 33), (255, 59, 33)]
+current_color = 0
+iterations = 0
 middle_line_pos = [0, HEIGHT/2]
   
 player_size = 46
@@ -65,7 +66,7 @@ def drop_enemies(enemy_list):
 def draw_enemies(enemy_list):
     for enemy_pos in enemy_list:
         pygame.draw.rect(gameDisplay, BLACK, (enemy_pos[0]-2, enemy_pos[1]-2, 50, 50))
-        pygame.draw.rect(gameDisplay, RED, (enemy_pos[0], enemy_pos[1], enemy_size, enemy_size))
+        pygame.draw.rect(gameDisplay, colors[current_color], (enemy_pos[0], enemy_pos[1], enemy_size, enemy_size))
   
   
 def update_enemy_positions(enemy_list, SCORE, SPEED, player_pos_y, enemy_List):
@@ -157,16 +158,15 @@ def game_intro():
         else:
             pygame.draw.rect(gameDisplay, RED,(525,350,150,50))
   
-        button("Singleplayer", 125, 350, 150, 50, GREEN, GREEN_B, "play")
-        button("Multiplayer", 525, 350, 150, 50, RED, RED_B, "quit")
+        button("Одиночная игра", 125, 350, 150, 50, GREEN, GREEN_B, "play")
+        button("Сетевая игра", 525, 350, 150, 50, RED, RED_B, "quit")
   
-        smallText = pygame.font.Font("freesansbold.ttf",20)
-        textSurf, textRect = text_objects("Singleplayer", smallText)
+        smallText = pygame.font.Font("freesansbold.ttf",18)
+        textSurf, textRect = text_objects("Одиночная игра", smallText)
         textRect.center = ( (150+(100/2)), (350+(50/2)) )
         gameDisplay.blit(textSurf, textRect)
-  
-        smallText = pygame.font.Font("freesansbold.ttf",20)
-        textSurf, textRect = text_objects("Multiplayer", smallText)
+        smallText = pygame.font.Font("freesansbold.ttf",18)
+        textSurf, textRect = text_objects("Сетевая игра", smallText)
         textRect.center = ( (75+(525)), (350+(50/2)) )
         gameDisplay.blit(textSurf, textRect)
   
@@ -254,7 +254,11 @@ def game_loop():
         clock.tick(30)
   
         pygame.display.update()
-  
+    iterations += 1
+    if iterations >= FPS * 5:
+        iterations = 0
+        if current_color < 4:
+            current_color += 1
 game_intro()
   
 pygame.quit()
